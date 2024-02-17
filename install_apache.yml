@@ -4,23 +4,10 @@
   become: true
   tasks:
 
-  - name: Update Reposotory Index
-    apt:
+  - name: Install Apache and PHP Packages
+    package:
+      name:
+        - "{{ apache_pkg }}"
+        - "{{ php_pkg }}"
+      state: latest
       update_cache: yes
-    when: ansible_distribution in ["Debian", "Ubuntu"]
-
-  - name: Install Apache2 and PHP Packages on Debian and Ubuntu Systems
-    apt:
-      name:
-        - apache2
-        - libapache2-mod-php
-      state: latest
-    when: ansible_distribution in ["Debian", "Ubuntu"]
-
-  - name: Install Apache and PHP Packages on Red Hat Family Systems
-    dnf:
-      name:
-        - httpd
-        - php
-      state: latest
-    when: ansible_distribution in ["Red Hat", "CentOS", "Oracle", "AlmaLinux", "RockyLinux"]
