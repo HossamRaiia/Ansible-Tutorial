@@ -5,12 +5,14 @@
   pre_tasks:
 
   - name: Install Updates Debian Family Systems
+    tags: always
     apt:
       upgrade: dist
       update_cache: yes
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install Updates Red Hat Family Systems
+    tags: always
     dnf:
       update_only: yes
       update_cache: yes
@@ -21,6 +23,7 @@
   tasks:
 
   - name: Install Apache2 and PHP Packages on Debian Family Systems
+    tags: apache,apache2,debian,ubuntu,php
     apt:
       name:
         - apache2
@@ -29,6 +32,7 @@
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install Apache and PHP Module on Red Hat Family Systems.
+    tags: apache,httpd,redhat,centos,almalinux,rhel,fedora,oracle,rockylinux,php
     dnf:
       name:
         - httpd
@@ -36,17 +40,28 @@
       state: latest
     when: ansible_distribution in ["Red Hat", "rhel", "CentOS", "Fedora", "Oracle", "AlmaLinux", "RockyLinux"]
 
+  - name: Copy Default Site Files to Web Server WWW Location
+    tags: apache,apache2,httpd
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
 - hosts: DB_Servers
   become: true
   tasks:
 
   - name: Install MariaDB on Debian Family Systems
+    tags: db,mariadb,database,debian,ubuntu
     apt:
       name: mariadb-server
       state: latest
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install MariaDB on Red Hat Family Systems
+    tags: db,mariadb,database,centos,redhat,fedora,oracle,almalinux,rhel,rockylinux
     dnf:
       name: mariadb
       state: latest
@@ -57,6 +72,7 @@
   tasks:
 
   - name: Install Samba Server
+    tags: samba,fileserver,smb
     package:
       name: samba
       state: latest
