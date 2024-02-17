@@ -4,15 +4,8 @@
   become: true
   tasks:
 
-  - name: Update and Upgrade, Debian, Ubuntu Systems
-    apt:
-      upgrade: yes
-      update_cache: yes
-    when: ansible_distribution in ["Debian", "Ubuntu"]
-
-  - name: Update Red Hat Clone Systems
-    dnf:
+  - name: Update Systems
+    package:
       update_cache: yes
       name: "*"
       state: latest
-    when: ansible_distribution in ["Red Hat", "CentOS", "Oracle", "AlmaLinux", "RockyLinux"]

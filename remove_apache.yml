@@ -4,13 +4,9 @@
   become: true
   tasks:
 
-
-  - name: Remove Apache2 Package on Ubuntu Servers
-    apt:
-      name: apache2
+  - name: Remove Apache and PHP Packages from all Systems
+    package:
+      name:
+        - "{{ apache_pkg }}"
+        - "{{ php_pkg }}"
       state: absent
-
-  - name: Remove PHP Support for Apache
-    apt:
-      name: libapache2-mod-php
-      state: absent 
