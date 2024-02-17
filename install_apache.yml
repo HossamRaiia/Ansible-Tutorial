@@ -4,10 +4,20 @@
   become: true
   tasks:
 
-  - name: Install Apache and PHP Packages
-    package:
+  - name: Install Apache2 and PHP Packages on Debian Family Systems
+    apt:
       name:
-        - "{{ apache_pkg }}"
-        - "{{ php_pkg }}"
+        - apache2
+        - libapache2-mod-php
       state: latest
       update_cache: yes
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+
+  - name: Install Apache and PHP Module on Red Hat Family Systems.
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["Red Hat", "rhel", "CentOS", "Fedora", "Oracle", "AlmaLinux", "RockyLinux"]
