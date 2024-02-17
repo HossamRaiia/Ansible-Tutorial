@@ -4,9 +4,17 @@
   become: true
   tasks:
 
-  - name: Remove Apache and PHP Packages from all Systems
-    package:
+  - name: Remove Apache2 and PHP Packages from Debian Family Systems
+    apt:
       name:
-        - "{{ apache_pkg }}"
-        - "{{ php_pkg }}"
+        - apache2
+        - libapache2-mod-php
       state: absent
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+  - name: Remove Apache and PHP Packages From Red Hat Family Systems
+    dnf:
+      name:
+        - httpd
+        - php
+      state: absent
+    when: ansible_distribution in ["Red Hat", "rhel", "CentOS", "Fedora", "Oracle", "AlmaLinux", "RockyLinux"]
