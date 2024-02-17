@@ -7,13 +7,28 @@
   - name: Update Reposotory Index
     apt:
       update_cache: yes
+    when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install Apache2 Package on Ubuntu Servers
     apt:
       name: apache2
       state: latest
+    when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install PHP Support for Apache
     apt:
       name: libapache2-mod-php
-      state: latest 
+      state: latest
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+
+  - name: Install Apache Package on Red Hat Clone Systems
+    dnf:
+      name: httpd
+      state: latest
+    when: ansible_distribution in ["Red Hat", "CentOS", "Oracle", "AlmaLinux", "RockyLinux"]
+
+  - name: Install PHP Module on Red Hat Clone Systems
+    dnf:
+      name: php
+      state: latest
+    when: ansible_distribution in ["Red Hat", "CentOS", "Oracle", "AlmaLinux", "RockyLinux"]
