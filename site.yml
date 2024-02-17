@@ -1,0 +1,62 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Install Updates Debian Family Systems
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+
+  - name: Install Updates Red Hat Family Systems
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution in ["Red Hat", "rhel", "CentOS", "Fedora", "Oracle", "AlmaLinux", "RockyLinux"]
+
+- hosts: Web_Servers
+  become: true
+  tasks:
+
+  - name: Install Apache2 and PHP Packages on Debian Family Systems
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+
+  - name: Install Apache and PHP Module on Red Hat Family Systems.
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution in ["Red Hat", "rhel", "CentOS", "Fedora", "Oracle", "AlmaLinux", "RockyLinux"]
+
+- hosts: DB_Servers
+  become: true
+  tasks:
+
+  - name: Install MariaDB on Debian Family Systems
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+
+  - name: Install MariaDB on Red Hat Family Systems
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution in ["Red Hat", "rhel", "CentOS", "Fedora", "Oracle", "AlmaLinux", "RockyLinux"]
+
+- hosts: File_Servers
+  become: true
+  tasks:
+
+  - name: Install Samba Server
+    package:
+      name: samba
+      state: latest
